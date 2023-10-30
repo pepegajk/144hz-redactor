@@ -12,119 +12,119 @@ public class Figure
 
 public class Program
 {
-    private static string filePath; // Переменная для хранения пути к файлу
-    private static Figure figure = new Figure(); // Создание объекта класса Figure
+    private static string filePath; 
+    private static Figure figure = new Figure(); 
 
     public static void Main(string[] args)
     {
         Console.WriteLine("Текстовый редактор");
         Console.Write("Введите путь к файлу: ");
-        filePath = Console.ReadLine(); // Получение пути к файлу от пользователя
+        filePath = Console.ReadLine(); 
 
-        if (!File.Exists(filePath)) // Проверка существования файла
+        if (!File.Exists(filePath)) 
         {
             Console.WriteLine("Файл не существует. Создать новый? (Y/N)");
             var createNew = Console.ReadKey();
             if (createNew.Key == ConsoleKey.Y)
             {
-                CreateNewFile(); // Создание нового файла, если он не существует
+                CreateNewFile(); 
             }
             else
             {
-                Environment.Exit(0); // Выход из программы, если пользователь отказывается создавать новый файл
+                Environment.Exit(0); 
             }
         }
 
-        LoadFile(); // Загрузка данных из файла
-        DisplayMenu(); // Отображение меню для пользователя
+        LoadFile(); 
+        DisplayMenu(); 
     }
 
     private static void CreateNewFile()
     {
         Console.Write("Введите название фигуры: ");
-        figure.Name = Console.ReadLine(); // Получение названия фигуры от пользователя
+        figure.Name = Console.ReadLine(); 
 
         Console.Write("Введите ширину: ");
         if (double.TryParse(Console.ReadLine(), out double width))
         {
-            figure.Width = width; // Получение ширины фигуры от пользователя
+            figure.Width = width; 
         }
         else
         {
             Console.WriteLine("Ошибка при вводе ширины.");
-            Environment.Exit(0); // Завершение программы при ошибке ввода ширины
+            Environment.Exit(0); 
         }
 
         Console.Write("Введите высоту: ");
         if (double.TryParse(Console.ReadLine(), out double height))
         {
-            figure.Height = height; // Получение высоты фигуры от пользователя
+            figure.Height = height; 
         }
         else
         {
             Console.WriteLine("Ошибка при вводе высоты.");
-            Environment.Exit(0); // Завершение программы при ошибке ввода высоты
+            Environment.Exit(0); 
         }
 
-        SaveFile(); // Сохранение данных в файл
+        SaveFile(); 
     }
 
     private static void LoadFile()
     {
-        string fileExtension = Path.GetExtension(filePath).ToLower(); // Получение расширения файла
+        string fileExtension = Path.GetExtension(filePath).ToLower(); 
 
-        // Проверка формата файла и загрузка данных из него соответственно
+        
         if (fileExtension == ".txt")
         {
-            string[] lines = File.ReadAllLines(filePath); // Чтение строк из файла
+            string[] lines = File.ReadAllLines(filePath); 
             if (lines.Length == 3)
             {
-                figure.Name = lines[0]; // Загрузка названия фигуры
+                figure.Name = lines[0]; 
                 if (double.TryParse(lines[1], out double width))
                 {
-                    figure.Width = width; // Загрузка ширины фигуры
+                    figure.Width = width; 
                 }
                 if (double.TryParse(lines[2], out double height))
                 {
-                    figure.Height = height; // Загрузка высоты фигуры
+                    figure.Height = height; 
                 }
             }
         }
         else if (fileExtension == ".json")
         {
-            string json = File.ReadAllText(filePath); // Чтение JSON из файла
-            figure = JsonSerializer.Deserialize<Figure>(json); // Десериализация JSON в объект Figure
+            string json = File.ReadAllText(filePath); 
+            figure = JsonSerializer.Deserialize<Figure>(json); 
         }
         else if (fileExtension == ".xml")
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Figure)); // Создание объекта XmlSerializer
+            XmlSerializer serializer = new XmlSerializer(typeof(Figure)); 
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
             {
-                figure = (Figure)serializer.Deserialize(fileStream); // Десериализация XML в объект Figure
+                figure = (Figure)serializer.Deserialize(fileStream); 
             }
         }
     }
 
     private static void SaveFile()
     {
-        string fileExtension = Path.GetExtension(filePath).ToLower(); // Получение расширения файла
+        string fileExtension = Path.GetExtension(filePath).ToLower(); 
 
-        // Проверка формата файла и сохранение данных в него соответственно
+        
         if (fileExtension == ".txt")
         {
-            File.WriteAllText(filePath, $"{figure.Name}\n{figure.Width}\n{figure.Height}"); // Запись данных в текстовый файл
+            File.WriteAllText(filePath, $"{figure.Name}\n{figure.Width}\n{figure.Height}"); 
         }
         else if (fileExtension == ".json")
         {
-            string json = JsonSerializer.Serialize(figure); // Сериализация объекта Figure в JSON
-            File.WriteAllText(filePath, json); // Запись JSON в файл
+            string json = JsonSerializer.Serialize(figure); 
+            File.WriteAllText(filePath, json); 
         }
         else if (fileExtension == ".xml")
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Figure)); // Создание объекта XmlSerializer
+            XmlSerializer serializer = new XmlSerializer(typeof(Figure)); 
             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
             {
-                serializer.Serialize(fileStream, figure); // Сериализация объекта Figure в XML и запись в файл
+                serializer.Serialize(fileStream, figure); 
             }
         }
     }
@@ -145,9 +145,9 @@ public class Program
 
             if (key.Key == ConsoleKey.F1)
             {
-                SaveFile(); // Сохранение данных при нажатии F1
+                SaveFile(); 
                 Console.WriteLine("Файл сохранен.");
             }
-        } while (key.Key != ConsoleKey.Escape); // Выход из программы при нажатии Escape
+        } while (key.Key != ConsoleKey.Escape); 
     }
 }
